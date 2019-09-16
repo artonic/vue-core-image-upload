@@ -1,4 +1,6 @@
 const webpack = require( 'webpack' );
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const path = require('path');
 const fse = require('fs-extra');
 
@@ -41,19 +43,23 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: {
-            loader: 'style!css'
-        },
+        use: [
+          { loader: 'style-loader' },
+          { loader: 'css-loader' }
+        ],
       }
     ]
   },
   plugins: [
-    new webpack.optimize.UglifyJsPlugin( {
-      minimize : true,
-      sourceMap : false,
-      mangle: true,
-      compress: {
-        warnings: false
+    new VueLoaderPlugin(),
+    new UglifyJsPlugin( {
+      uglifyOptions: {
+        minimize : true,
+        sourceMap : false,
+        mangle: true,
+        compress: {
+          drop_console: true
+        }
       }
     } )
   ],
